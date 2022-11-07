@@ -1,5 +1,5 @@
 
-# task-board
+# Task Board
 Simple task management app
 
 ## Prerequisites
