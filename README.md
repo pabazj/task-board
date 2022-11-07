@@ -8,7 +8,7 @@ NodeJS - https://nodejs.org/en/download/
 ## Installation
 Clone the repo: git clone https://github.com/pabazj/task-board.git
 Change directory: cd task-board
-install node modules: npm i
+install node modules: yarn install
 
 ### `yarn start`
 Runs the app in the development mode.
