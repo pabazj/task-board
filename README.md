@@ -3,12 +3,13 @@
 Simple task management app
 
 ## Prerequisites
-NodeJS - https://nodejs.org/en/download/
+- NodeJS - https://nodejs.org/en/download/
+- Yarn - npm install -g yarn
 
 ## Installation
-Clone the repo: git clone https://github.com/pabazj/task-board.git
-Change directory: cd task-board
-install node modules: yarn install
+- Clone the repo: git clone https://github.com/pabazj/task-board.git
+- Change directory: cd task-board
+- Install node modules: yarn install
 
 ### `yarn start`
 Runs the app in the development mode.
