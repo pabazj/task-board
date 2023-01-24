@@ -15,18 +15,21 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import SortByAlphaIcon from '@mui/icons-material/SortByAlpha';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Think from '../assets/think.png';
 
 import Task from './TaskList'
 
 const StateListContainer = styled(List)({
-    display: 'flex',
-    flexDirection: 'row'
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    padding: '3rem',
+    gap: '1rem'
 });
 
 const StateListItemCard = styled(Card)({
-    height: "500%",
     background: '#F0FFFF',
-    margin: '10px',
+    margin: '5px',
     minWidth: '20%'
 });
 
@@ -40,14 +43,28 @@ const AddTaskButtonWraperDiv = styled('div')(({ theme }) => ({
 }));
 
 const AddStateWraperDiv = styled('div')(({ theme }) => ({
-    marginTop: '10px',
-    marginLeft: '10px'
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.8 rem',
+    position: 'fixed',
+    right: '3rem',
+    bottom: '5rem',
+    zIndex: '3'
 }));
 
 const AddNewState = styled(TextField)({
-    width: '150px',
-    paddingRight: '10px'
+    width: '200px',
+    paddingRight: '10px',
+    paddingBottom: '10px'
 });
+
+const ImageWrapper = styled('div')(({ theme }) => ({
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center',
+    padding: '10rem'
+}));
+
 
 export default function StateList(props) {
 
@@ -58,6 +75,7 @@ export default function StateList(props) {
     const [deadline, setDeadline] = useState('');
     const [isEdit, setIsEdit] = useState(false);
     const [selectedTask, setSelectedtask] = useState({})
+    const [isStateOpen, setIsStateOpen] = useState(false);
 
     const newListTitleRef = useRef();
 
@@ -80,10 +98,11 @@ export default function StateList(props) {
         newListTitleRef.current.value = "";
 
         setSelectedListId(list)
+        setIsStateOpen(false)
     }
 
     const handleAddTask = () => {
-        console.log(deadline, '..deadline')
+
         const task = {
             id: isEdit ? selectedTask[0].id : uuid(),
             name: name,
@@ -145,14 +164,49 @@ export default function StateList(props) {
         props.onSortTasks(id)
     }
 
+    const handlDeleteState = (id) => {
+        props.onRemoveTypes(id)
+    }
+
+    const showAddTypeField = () => {
+        setIsStateOpen(true)
+    }
+
     return (
         <div >
+            <div>
+            <AddStateWraperDiv
+            >
+                {!isStateOpen && <Button variant="contained" onClick={showAddTypeField} color="success">Add Type</Button>}
+                
+                {isStateOpen && <Box
+                    component="form"
+                    sx={{
+                        bgcolor: 'background.paper',
+                        boxShadow: 1,
+                        borderRadius: 2,
+                        p: 2,
+                    }}
+                    noValidate
+                    autoComplete="off"
+                >
+                    <AddNewState variant="standard" inputRef={newListTitleRef} placeholder="Add New Type" required />
+                    <Button variant="contained" onClick={handleAddStateList}>Save</Button>
+                </Box>}
+
+            </AddStateWraperDiv>
+            {props.data?.length === 0 && isStateOpen === false ? <ImageWrapper>
+                <img src={Think} alt='' />
+            </ImageWrapper> : null}
+            </div>
+
             <StateListContainer>
                 {props.data.map(list => (
                     <StateListItemCard key={list.id}>
                         <CardActionArea>
                             <ListItem key={list.id}>
                                 <Typography variant="h5" gutterBottom>{list.title}</Typography>
+                                <DeleteIcon onClick={() => handlDeleteState(list.id)} />
                             </ListItem>
 
                             <List sx={{ width: '100%', maxWidth: 360 }}>
@@ -224,23 +278,6 @@ export default function StateList(props) {
                     </StateListItemCard>
                 ))}
 
-                <AddStateWraperDiv>
-                    <Box
-                        component="form"
-                        sx={{
-                            bgcolor: 'background.paper',
-                            boxShadow: 1,
-                            borderRadius: 2,
-                            p: 2,
-                            minWidth: 200,
-                        }}
-                        noValidate
-                        autoComplete="off"
-                    >
-                        <AddNewState variant="standard" inputRef={newListTitleRef} placeholder="Add New State" />
-                        <Button variant="contained" onClick={handleAddStateList}>Add</Button>
-                    </Box>
-                </AddStateWraperDiv>
             </StateListContainer >
         </div>
     )

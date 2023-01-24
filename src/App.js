@@ -5,11 +5,13 @@ import {
   Routes
 } from "react-router-dom";
 import StateList from './components/StateList'
-import Typography from '@mui/material/Typography';
+import './app.css';
 
 const HeaderWrapperDiv = styled('div')(({ theme }) => ({
   display: 'flex', 
-  justifyContent: 'center'
+  justifyContent: 'center',
+  paddingTop:'2rem',
+  color: 'blue'
 }));
 
 
@@ -81,11 +83,32 @@ function App() {
 
   }
 
+  const removeTypes = (id) => {
+    let items = [...lists];
+    let filteredTypes = items.filter(item => item.id !== id)
+    items =[...filteredTypes]
+    setListsState(items)
+    localStorage.setItem("lists", JSON.stringify(items));
+  }
+
   return (
-    <>
+    <div className='app' 
+    >
       <Router>
         <HeaderWrapperDiv>
-          <Typography variant="h3" gutterBottom>Task Board</Typography>
+          <div className="container">
+            <div className="text">
+              <span className="--i:1">M</span>
+              <span className="--i:2">y</span>
+              <span className="--i:3"></span>
+              <span className="--i:4">T</span>
+              <span className="--i:5">a</span>
+              <span className="--i:6">s</span>
+              <span className="--i:7">k</span>
+              <span className="--i:8">s</span>
+              <span className="--i:9"></span>
+            </div>
+          </div>
         </HeaderWrapperDiv>
         <StateList
           data={lists}
@@ -94,11 +117,12 @@ function App() {
           onRemoveTask={removeTask}
           onEditTask={editTask}
           onSortTasks={sortTasks}
+          onRemoveTypes={removeTypes}
         />
         <Routes>
         </Routes>
       </Router>
-    </>
+      </div>
   );
 }
 
